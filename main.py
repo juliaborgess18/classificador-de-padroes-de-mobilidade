@@ -1,17 +1,15 @@
 import streamlit as st
 import pandas as pd
- 
-st.write("""## Classificador de Padrões de Mobilidade""")
 
-st.title("Upload do Arquivo CSV")
+st.title("Classificador de Padrões de Mobilidade")
+
+st.write("### Upload do Arquivo CSV")
     
-# Interface para upload de arquivo
-uploaded_file = st.file_uploader("Selecione um arquivo CSV", type=["csv"])
+uploaded_file = st.file_uploader("Selecione um arquivo CSV", type=["csv"]) # Interface para upload de arquivo
 
+st.write("---")
+
+st.write("### Resultado do processamento")
 if uploaded_file is not None:
-    # Ler o arquivo CSV
-    df = pd.read_csv(uploaded_file)
-    
-    # Mostrar os dados
-    st.write("### Dados do arquivo CSV")
-    st.write(df)
+    df = pd.read_csv(uploaded_file) # Ler o arquivo CSV    
+    st.write(df) # Mostrar os dados
