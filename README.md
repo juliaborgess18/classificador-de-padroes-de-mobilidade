@@ -1,4 +1,4 @@
-# README - Sistema de Classificação de Padrões de Mobilidade em Pessoas Idosas
+# Sistema de Classificação de Padrões de Mobilidade em Pessoas Idosas
 
 Este documento apresenta informações sobre o sistema desenvolvido como parte do Trabalho de Conclusão de Curso (TCC) intitulado "Desenvolvimento de um Sistema de Classificação de Padrões de Mobilidade em Pessoas Idosas Utilizando Acelerômetros em Dispositivos Vestíveis".
 
