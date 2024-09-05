@@ -1,24 +1,39 @@
 import pickle
+from joblib import load
 import pandas as pd
 
 class SVM():
     
     @classmethod
     def processa(cls, dataframe: pd.DataFrame) -> pd.DataFrame:
-        with open('src/ml/modelos/svm_model.pkl', 'rb') as file:
-            svm_loaded = pickle.load(file)
+        with open('src/ml/modelos/svm_model.joblib', 'rb') as file:
+            svm_loaded = load(file)
             dataframe_aux = dataframe[['acelX', 'acelY', 'acelZ', 'MAGNITUDE_ACEL']]
             y_pred = svm_loaded.predict(dataframe_aux) 
-            dataframe = dataframe.rename(columns={'idTipoMovimento':'Classe Verdadeira'})
-            for i, classe in enumerate(dataframe['Classe Verdadeira']):
+            
+            lista_classes_verdadeiras = []
+            lista_classes_preditas = []            
+            
+            for i, classe in enumerate(dataframe['idTipoMovimento']):
                 if classe == 1:
-                    dataframe.loc[i, 'Classe Verdadeira'] = 'Correndo'
+                    lista_classes_verdadeiras.append('Correndo')
                 elif classe == 2:
-                    dataframe.loc[i, 'Classe Verdadeira'] = 'Andando'
+                    lista_classes_verdadeiras.append('Andando')
                 elif classe == 3:
-                    dataframe.loc[i, 'Classe Verdadeira'] = 'Caindo'
+                    lista_classes_verdadeiras.append('Caindo')
+            
+            for i, classe in enumerate(y_pred):
+                if classe == 1:
+                    lista_classes_preditas.append('Correndo')
+                elif classe == 2:
+                    lista_classes_preditas.append('Andando')
+                elif classe == 3:
+                    lista_classes_preditas.append('Caindo')
+                    
+            dataframe['Classe Verdadeira'] = lista_classes_verdadeiras  
+                    
             dataframe = dataframe[['acelX', 'acelY', 'acelZ', 'MAGNITUDE_ACEL', 'Classe Verdadeira']]
-            dataframe['Classe Predita'] = y_pred
+            dataframe['Classe Predita'] = lista_classes_preditas
         return dataframe
         
     

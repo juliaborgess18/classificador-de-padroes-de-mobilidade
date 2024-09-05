@@ -1,6 +1,4 @@
 import streamlit as st 
-import pandas as pd
-from io import StringIO
 import numpy as np
 from src.ml.prepara_arquivo import PreparaArquivo
 from src.ml.dt import DecisionTree
@@ -29,3 +27,5 @@ if arquivo is not None:
         st.write(df)
 else: 
     st.sidebar.write("Nenhum arquivo selecionado.")
+st.sidebar.divider() 
+st.sidebar.caption("Aplicação desenvolvida por Júlia Borges Santos, estudante de Sistemas de Informação no IFES Cachoeiro. 🚀")
