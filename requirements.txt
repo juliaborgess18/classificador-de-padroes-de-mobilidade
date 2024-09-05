@@ -1,9 +1,5 @@
-numpy 
-pandas 
-glob
-sys
 matplotlib
-seaborn 
-warnings
-openpyxl
-scipy
+numpy
+streamlit
+pandas
+scikit-learn

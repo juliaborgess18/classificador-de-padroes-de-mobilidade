@@ -2,29 +2,30 @@ import streamlit as st
 import pandas as pd
 from io import StringIO
 import numpy as np
+from src.ml.prepara_arquivo import PreparaArquivo
+from src.ml.dt import DecisionTree
+from src.ml.knn import KNN
 from src.ml.svm import SVM
 
-st.title("""Machine Learning para Mobilidades""")
+st.title("""Machine Learning para Classificação de Mobilidades""")
 
-arquivo = st.file_uploader("Escolha um arquivo", type=["csv", "xlsx"]) 
+add_selectbox = st.sidebar.selectbox(
+    "Selecione o modelo: ",
+    ("SVM", "KNN", "Decision Tree")
+)
+
+arquivo = st.sidebar.file_uploader("Escolha um arquivo", type=["csv", "xlsx"])
 
 if arquivo is not None:
-    if arquivo.name.endswith('.csv'):
-        dataframe = pd.read_csv(arquivo)
-    elif arquivo.name.endswith('.xlsx'):
-        dataframe = pd.read_excel(arquivo)
-    colunas_selecionadas = ['acelX', 'acelY', 'acelZ']
-    dataframe = dataframe[colunas_selecionadas]
-    dataframe['MAGNITUDE_ACEL']  = np.sqrt(dataframe['acelX']**2 + dataframe['acelY']**2 + dataframe['acelZ']**2)
+    df = PreparaArquivo().processa(arquivo)
+    if add_selectbox == "SVM":
+        df = SVM.processa(df)
+        st.write(df)
+    if add_selectbox == "KNN":
+        df = KNN.processa(df)
+        st.write(df)
+    if add_selectbox == "Decision Tree":
+        df = DecisionTree.processa(df)
+        st.write(df)
 else: 
-    st.write("Nenhum arquivo selecionado.")
-svm = SVM()
-resultado = []
-dataframe_aux = dataframe[['acelX', 'acelY', 'acelZ','MAGNITUDE_ACEL']]
-resultado = svm.processa(dataframe_aux)
-dataframe.rename(columns={'idTipoMovimento':'Classe Verdadeira'})
-dataframe['Classe Verdadeira'] = 'Andando'
-dataframe['Classe Predita'] = resultado
-st.write(dataframe)
-
-
+    st.sidebar.write("Nenhum arquivo selecionado.")
