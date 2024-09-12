@@ -8,32 +8,30 @@ class DecisionTree():
     def processa(cls, dataframe: pd.DataFrame) -> pd.DataFrame:
         with open('src/ml/modelos/dt_model.joblib', 'rb') as file:
             dt_loaded = load(file)
-            dataframe_aux = dataframe[['acelX', 'acelY', 'acelZ', 'MAGNITUDE_ACEL']]
+            dataframe_aux = dataframe[['acelX','acelY','acelZ','girX','girY','girZ', 'MAGNITUDE_ACEL','MAGNITUDE_GIRO']]
             y_pred = dt_loaded.predict(dataframe_aux)
-             
-            lista_classes_verdadeiras = []
-            lista_classes_preditas = []            
+
+            movimentos_formatados = {"D01":"Caminhando",
+                "D02":"Correndo",
+                "D03":"Subindo e descendo escadas",
+                "D04":"Sentando em uma cadeira, esperar um momento e levantar-se",
+                "D05":"Sentado por um momento, tentar levantar-se e cair na cadeira",
+                "D06":"Agachando (dobrando os joelhos), amarrar sapatos e levantar-se",
+                "D07":"Tropeçar enquanto caminha",
+                "D08":"Pular suavemente sem cair(tentando alcançar um objeto)",
+                "D09":"Bater na mesa com a mão",
+                "D10":"Batendo palmas",
+                "D11":"Abrindo e fechando porta"
+            } 
+
+            if 'idTipoMovimento' in dataframe.columns:
+                dataframe['Classe Verdadeira'] = dataframe['idTipoMovimento'].str.strip().map(movimentos_formatados).fillna("Desconhecido")
+              
+            y_pred_descricoes = [movimentos_formatados.get(id, "Desconhecido") for id in y_pred]
             
-            for i, classe in enumerate(dataframe['idTipoMovimento']):
-                if classe == 1:
-                    lista_classes_verdadeiras.append('Correndo')
-                elif classe == 2:
-                    lista_classes_verdadeiras.append('Andando')
-                elif classe == 3:
-                    lista_classes_verdadeiras.append('Caindo')
-            
-            for i, classe in enumerate(y_pred):
-                if classe == 1:
-                    lista_classes_preditas.append('Correndo')
-                elif classe == 2:
-                    lista_classes_preditas.append('Andando')
-                elif classe == 3:
-                    lista_classes_preditas.append('Caindo')
-                    
-            dataframe['Classe Verdadeira'] = lista_classes_verdadeiras  
-                    
-            dataframe = dataframe[['acelX', 'acelY', 'acelZ', 'MAGNITUDE_ACEL', 'Classe Verdadeira']]
-            dataframe['Classe Predita'] = lista_classes_preditas
+            dataframe['Classe Predita'] = y_pred_descricoes
+                                         
+            dataframe = dataframe[['Classe Verdadeira', 'Classe Predita']]
         return dataframe
         
     

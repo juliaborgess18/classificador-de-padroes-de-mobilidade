@@ -30,21 +30,11 @@ class Limiar():
         lista_classes_verdadeiras = []
         lista_classes_preditas = []           
         
-        for i, classe in enumerate(dataframe['idTipoMovimento']):
-            if classe == 1:
-                lista_classes_verdadeiras.append('Correndo')
-            elif classe == 2:
-                lista_classes_verdadeiras.append('Andando')
-            elif classe == 3:
-                lista_classes_verdadeiras.append('Caindo')
-        
-        for i, classe in enumerate(dataframe['ATIVIDADE']):
-            if classe == 1:
-                lista_classes_preditas.append('Correndo')
-            elif classe == 2:
-                lista_classes_preditas.append('Andando')
-            elif classe == 3:
-                lista_classes_preditas.append('Caindo')
+        movimento_dict = {1: 'Correndo', 2: 'Andando', 3: 'Caindo'}
+        lista_classes_verdadeiras = dataframe['idTipoMovimento'].map(movimento_dict).tolist()
+
+        atividade_dict = {1: 'Correndo', 2: 'Andando', 3: 'Caindo'}
+        lista_classes_preditas = dataframe['ATIVIDADE'].map(atividade_dict).tolist()
                 
         dataframe['Classe Verdadeira'] = lista_classes_verdadeiras  
                 
